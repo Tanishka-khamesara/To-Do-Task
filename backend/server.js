@@ -9,7 +9,11 @@ const app = express(); //done
 app.use(bodyParser.json()); //done
 
 const cors = require('cors');  //done
-app.use(cors());    //done
+const corsOptions = {
+    origin: ['http://localhost:5500'] ,
+    credentials: true,
+};
+app.use(cors(corsOptions));    //done
 
 // Connect to MongoDB
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
