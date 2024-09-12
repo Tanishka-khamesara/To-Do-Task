@@ -10,7 +10,7 @@ app.use(bodyParser.json()); //done
 
 const cors = require('cors');  //done
 const corsOptions = {
-    origin: ['http://localhost:5500'] ,
+    origin: ['http://localhost:5500','https://to-do-task-roan.vercel.app/'] ,
     credentials: true,
     methods: ['GET', 'POST', 'DELETE']
 };
