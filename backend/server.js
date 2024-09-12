@@ -18,13 +18,16 @@ const corsOptions = {
 app.options('*', cors(corsOptions));
 
 // Connect to MongoDB
-mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+mongoose.connect(process.env.DB_URI,{
+    serverSelectionTimeoutMS: 30000 // Increase the timeout to 30 seconds
+}).then(() => {
     console.log("Mongo Db Connected Successfully");
     })
     .catch((err) => {
         console.log("Error is ", err);
     })
  
+    mongoose.set('debug', true);
 
 // Task Schema and Model
 const taskSchema = new mongoose.Schema({
