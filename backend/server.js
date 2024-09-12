@@ -16,6 +16,7 @@ const corsOptions = {
 };
 // app.use(cors(corsOptions));    //done
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 
 // Connect to MongoDB

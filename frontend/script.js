@@ -72,9 +72,9 @@ async function showLogData() {
 }
 
 // Polling function to update logs periodically (every 5 seconds)
-setInterval(async () => {
-  await showLogData();
-}, 5000); // Fetch logs every 5 seconds
+// setInterval(async () => {
+//   await showLogData();
+// }, 5000); // Fetch logs every 5 seconds
 
 // Initial data loading
 // showData();
