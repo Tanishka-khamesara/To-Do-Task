@@ -11,7 +11,7 @@ form.addEventListener("submit", async function (e) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ taskName, frequency }),
-   
+   credentials:"include"
   });
 
   const result = await response.json();
