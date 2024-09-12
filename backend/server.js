@@ -11,8 +11,9 @@ app.use(bodyParser.json()); //done
 const cors = require('cors');  //done
 const corsOptions = {
     origin: ['http://localhost:5500','https://to-do-task-roan.vercel.app/'] ,
-    
-    methods: ['GET', 'POST', 'DELETE']
+    credentials:true,
+    methods: ['GET', 'POST', 'DELETE'],
+    allowedHeaders: ['Content-Type']
 };
 // app.use(cors(corsOptions));    //done
 app.use(cors(corsOptions));
