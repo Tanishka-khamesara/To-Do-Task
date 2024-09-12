@@ -15,19 +15,24 @@ const corsOptions = {
     methods: ['GET', 'POST', 'DELETE']
 };
 // app.use(cors(corsOptions));    //done
-app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
+
 
 // Connect to MongoDB
-mongoose.connect(process.env.DB_URI,{
-    serverSelectionTimeoutMS: 30000 // Increase the timeout to 30 seconds
-}).then(() => {
-    console.log("Mongo Db Connected Successfully");
-    })
-    .catch((err) => {
-        console.log("Error is ", err);
-    })
- 
+mongoose.connect(process.env.DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000, // Increase the timeout to 30 seconds
+})
+.then(() => {
+    console.log("Mongo DB Connected Successfully");
+})
+.catch((err) => {
+    console.error("Error connecting to MongoDB:", err.message);
+});
+if (process.env.NODE_ENV === 'development') {
     mongoose.set('debug', true);
+}
 
 // Task Schema and Model
 const taskSchema = new mongoose.Schema({
