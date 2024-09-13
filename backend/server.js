@@ -69,10 +69,10 @@ const transporter = nodemailer.createTransport({
     }
 }); 
 // Helper function to send emails
-const sendEmail = async (taskName) => {
+const sendEmail = async (taskName,reciepent) => {
     try{await transporter.sendMail({
         from: process.env.EMAIL_USER,
-        to: 'abc@gmail.com',
+        to: `${reciepent}`,
         subject: `Scheduled Reminder for task :- ${taskName} `,
         text: `This is a reminder email for :- ${taskName}.`
     });
@@ -86,7 +86,7 @@ const sendEmail = async (taskName) => {
 
 // Route to schedule tasks
 app.post('/add-task', async (req, res) => {
-    const { taskName, frequency } = req.body;
+    const { taskName, frequency,reciepent } = req.body;
     if (typeof frequency !== 'string') {
         return res.status(400).json({ success: false, message: 'Invalid cron pattern' });
       }
@@ -104,7 +104,7 @@ app.post('/add-task', async (req, res) => {
     
             if (!existingLog) {
                 // If no existing log, send the email and create the log
-                await sendEmail(taskName);
+                await sendEmail(taskName,reciepent);
                 const log = new Log({
                     taskName,
                     executionTime: new Date(),

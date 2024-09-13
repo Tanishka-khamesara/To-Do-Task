@@ -2,16 +2,18 @@ const form = document.getElementById("taskForm");
 const taskList = document.getElementById("taskList").querySelector("tbody");
 const taskLogs = document.getElementById("taskLogs").querySelector("tbody");
 
+
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
   const taskName = document.getElementById("taskName").value;
   const frequency = document.getElementById("frequency").value;
+  const reciepent = document.getElementById("email").value;
 
   try {
     const response = await fetch("https://to-do-task-fxqh.onrender.com/add-task", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ taskName, frequency }),
+      body: JSON.stringify({ taskName, frequency,reciepent}),
       credentials: "include" // Only if needed
     });
 
@@ -100,7 +102,7 @@ async function showLogData() {
 // Uncomment if needed
 setInterval(async () => {
   await showLogData();
-}, 5000); // Fetch logs every 5 seconds
+}, 20000); // Fetch logs every 5 seconds
 
 // Initial data loading
 // Uncomment if needed
