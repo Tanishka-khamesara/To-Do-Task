@@ -9,11 +9,19 @@ const app = express(); //done
 app.use(bodyParser.json()); //done
 
 const cors = require('cors');  //done
+const allowedOrigins = ['http://localhost:5500','http://127.0.0.1:5500', 'https://to-do-task-roan.vercel.app'];
 const corsOptions = {
-    origin: ['http://localhost:5500','https://to-do-task-roan.vercel.app/'] ,
-    credentials:true,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.error(`Blocked by CORS: ${origin}`); // Logging blocked origins
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
     methods: ['GET', 'POST', 'DELETE'],
-    allowedHeaders: ['Content-Type']
+    allowedHeaders: ['Content-Type'],
 };
 // app.use(cors(corsOptions));    //done
 app.use(cors(corsOptions));
@@ -32,9 +40,7 @@ mongoose.connect(process.env.DB_URI, {
 .catch((err) => {
     console.error("Error connecting to MongoDB:", err.message);
 });
-if (process.env.NODE_ENV === 'development') {
-    mongoose.set('debug', true);
-}
+
 
 // Task Schema and Model
 const taskSchema = new mongoose.Schema({
@@ -131,36 +137,7 @@ app.post('/add-task', async (req, res) => {
 
   res.json({ success: true, nextExecution: task.nextExecution });
 });
-// Route to delete a task
-app.delete('/delete-task/:taskName', async (req, res) => {
-    const { taskName } = req.params;
 
-    // Delete the task from the database
-    const deletedTask = await Task.findOneAndDelete({ taskName });
-
-    if (!deletedTask) {
-        return res.status(404).json({ success: false, message: 'Task not found' });
-    }
-
-    // Optionally, delete related logs as well
-    await Log.deleteMany({ taskName });
-
-    res.json({ success: true, message: `Task "${taskName}" and related logs deleted successfully.` });
-});
-
-// Route to delete a log
-app.delete('/delete-log/:id', async (req, res) => {
-    const { id } = req.params;
-
-    // Delete the log by its ID
-    const deletedLog = await Log.findByIdAndDelete(id);
-
-    if (!deletedLog) {
-        return res.status(404).json({ success: false, message: 'Log not found' });
-    }
-
-    res.json({ success: true, message: 'Log deleted successfully.' });
-});
 // Route to fetch task list (optional)
 app.get('/tasks', async (req, res) => {
   const tasks = await Task.find();
